@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Curious Problem Solver — Inland NW AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  :root {
+    --rust:     #C85A17;
+    --rust-dk:  #A34712;
+    --rust-lt:  #fdf0e8;
+    --teal:     #2C8C8C;
+    --teal-lt:  #3aadad;
+    --teal-dk:  #1f6666;
+    --teal-bg:  #e0f3f3;
+    --cream:    #F5F1EB;
+    --cream-dk: #EDE7DC;
+    --dark:     #1a1410;
+    --muted:    #7a6a5a;
+    --border:   #e2d9ce;
+    --white:    #ffffff;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--dark);
+    background: var(--white);
+    line-height: 1.8;
+    font-size: 1rem;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    text-decoration: none;
+  }
+  .nav-brand img {
+    width: 32px;
+    height: 32px;
+  }
+  .nav-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+  .nav-brand-name {
+    font-size: .88rem;
+    font-weight: 800;
+    color: var(--dark);
+    letter-spacing: -.01em;
+  }
+  .nav-brand-tag {
+    font-size: .62rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .nav-back {
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--teal);
+    text-decoration: none;
+    letter-spacing: .01em;
+    transition: color .2s;
+  }
+  .nav-back:hover { color: var(--teal-dk); }
+
+  /* ── HERO ── */
+  .hero {
+    background-color: var(--cream);
+    background-image: radial-gradient(circle, rgba(44,140,140,.1) 1px, transparent 1px);
+    background-size: 36px 36px;
+    padding: 6rem 2rem 5rem;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    font-size: .68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--rust);
+    margin-bottom: 1.75rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--rust);
+    flex-shrink: 0;
+  }
+  .hero-eyebrow::after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--rust);
+    flex-shrink: 0;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 900;
+    letter-spacing: -.04em;
+    line-height: 1.1;
+    color: var(--dark);
+    margin-bottom: 1.1rem;
+  }
+  .hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 400;
+    color: var(--muted);
+    max-width: 640px;
+    margin: 0 auto 1.75rem;
+    line-height: 1.6;
+  }
+  .hero-byline {
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--teal);
+    letter-spacing: .02em;
+  }
+  .hero-divider {
+    width: 48px;
+    height: 3px;
+    background: var(--rust);
+    margin: 1.75rem auto 0;
+    border-radius: 2px;
+  }
+  .hero-opening {
+    max-width: 680px;
+    margin: 2rem auto 0;
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.8;
+    font-style: italic;
+    border-left: 3px solid var(--teal);
+    padding-left: 1.4rem;
+    text-align: left;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 5.5rem 2rem;
+  }
+  .section.bg-white  { background: var(--white); }
+  .section.bg-cream  { background: var(--cream); }
+  .section.bg-teal   { background: var(--teal-dk); color: white; }
+
+  .content {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* Eyebrow */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--rust);
+    margin-bottom: .9rem;
+  }
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--rust);
+    flex-shrink: 0;
+  }
+  .bg-teal .eyebrow { color: var(--teal-lt); }
+  .bg-teal .eyebrow::before { background: var(--teal-lt); }
+
+  /* Section heading */
+  .section-title {
+    font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+    font-weight: 900;
+    letter-spacing: -.025em;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: var(--dark);
+  }
+  .bg-teal .section-title { color: white; }
+
+  /* Prose */
+  .prose p {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.85;
+    margin-bottom: 1.35rem;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  .bg-teal .prose p { color: rgba(255,255,255,.75); }
+
+  /* Sub-heading within prose */
+  .prose h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -.015em;
+    color: var(--dark);
+    margin: 2.5rem 0 .75rem;
+  }
+  .bg-teal .prose h3 { color: white; }
+  .prose h4 {
+    font-size: .95rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    color: var(--teal-dk);
+    margin: 1.75rem 0 .5rem;
+    text-transform: uppercase;
+    font-size: .72rem;
+    letter-spacing: .1em;
+  }
+  .bg-teal .prose h4 { color: var(--teal-lt); }
+
+  /* Callout / pull quote */
+  .callout {
+    background: var(--teal-bg);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 12px 12px 0;
+    padding: 1.4rem 1.75rem;
+    margin: 2rem 0;
+  }
+  .callout p {
+    color: var(--teal-dk) !important;
+    font-weight: 500 !important;
+    font-size: .97rem !important;
+    margin-bottom: 0 !important;
+    line-height: 1.7 !important;
+  }
+  .bg-cream .callout { background: white; }
+
+  /* Key statement */
+  .key-statement {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.55;
+    border-left: 4px solid var(--rust);
+    padding: 1rem 1.5rem;
+    margin: 2rem 0;
+    background: var(--rust-lt);
+    border-radius: 0 10px 10px 0;
+  }
+  .bg-teal .key-statement { background: rgba(255,255,255,.08); border-color: var(--teal-lt); color: white; }
+
+  /* Bullet list */
+  .prose ul {
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0 1.5rem;
+  }
+  .prose ul li {
+    display: flex;
+    gap: .85rem;
+    align-items: flex-start;
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.75;
+    margin-bottom: .75rem;
+  }
+  .prose ul li::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--teal);
+    flex-shrink: 0;
+    margin-top: .58em;
+  }
+  .bg-teal .prose ul li { color: rgba(255,255,255,.75); }
+  .bg-teal .prose ul li::before { background: var(--teal-lt); }
+
+  /* ── TWO DIMENSIONS CARDS ── */
+  .dimension-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+  }
+  @media (max-width: 680px) {
+    .dimension-grid { grid-template-columns: 1fr; }
+  }
+  .dimension-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .dimension-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .dimension-card.curiosity::before  { background: var(--teal); }
+  .dimension-card.rigor::before      { background: var(--rust); }
+
+  .dimension-card .dim-label {
+    font-size: .62rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    margin-bottom: .6rem;
+    display: block;
+  }
+  .dimension-card.curiosity .dim-label { color: var(--teal); }
+  .dimension-card.rigor .dim-label     { color: var(--rust); }
+
+  .dimension-card h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: .65rem;
+    letter-spacing: -.02em;
+  }
+  .dimension-card p {
+    font-size: .92rem;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  /* ── PROCESS STEPS ── */
+  .process-steps {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .process-step {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 12px;
+    padding: 1.25rem 1.4rem;
+  }
+  .step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--rust);
+    color: white;
+    font-size: .85rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-body {}
+  .step-title {
+    font-size: .88rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: .25rem;
+  }
+  .step-desc {
+    font-size: .88rem;
+    color: rgba(255,255,255,.65);
+    line-height: 1.65;
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .section-number {
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--border);
+    margin-bottom: 3.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-number::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── REFERENCES SECTION ── */
+  .ref-group {
+    margin-bottom: 3rem;
+  }
+  .ref-group-label {
+    font-size: .68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--rust);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+  }
+  .ref-group-label::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--rust);
+  }
+  .ref-entry {
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 0;
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+  .ref-entry:last-child { border-bottom: none; }
+  .ref-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--teal);
+    flex-shrink: 0;
+    margin-top: .6em;
+  }
+  .ref-content {}
+  .ref-content strong { font-weight: 700; color: var(--dark); }
+  .ref-content em     { font-style: italic; }
+  .ref-content p {
+    font-size: .9rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: .35rem;
+  }
+  .ref-content p:last-child { margin-bottom: 0; }
+  .ref-link {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: .82rem;
+    font-weight: 500;
+    word-break: break-all;
+    transition: color .2s;
+  }
+  .ref-link:hover { color: var(--teal-dk); text-decoration: underline; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark);
+    color: rgba(255,255,255,.45);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    font-size: .82rem;
+    line-height: 1.7;
+  }
+  footer strong { color: rgba(255,255,255,.75); font-weight: 600; }
+  footer a { color: var(--teal-lt); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    margin-bottom: .75rem;
+  }
+  .footer-brand img { width: 24px; height: 24px; opacity: .6; }
+
+  /* Inline links throughout body */
+  a { color: var(--teal); text-decoration: none; }
+  a:hover { text-decoration: underline; color: var(--teal-dk); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .section { padding: 4rem 1.25rem; }
+    .hero { padding: 4rem 1.25rem 3.5rem; }
+    nav { padding: 0 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="https://inlandnw.ai" target="_blank" rel="noopener">
+    <img src="https://gu-27.github.io/inland-nw-ai/img/ai-mark.png" alt="Inland NW AI mark">
+    <div class="nav-brand-text">
+      <span class="nav-brand-name">Inland NW AI</span>
+      <span class="nav-brand-tag">Research Resource</span>
+    </div>
+  </a>
+  <a class="nav-back" href="https://inlandnw.ai" target="_blank" rel="noopener">← Back to inlandnw.ai</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow">Conceptual &amp; Research Foundation</div>
+  <h1>The Curious Problem Solver</h1>
+  <p class="hero-subtitle">A Process-Based Identity Framework for Sustainable Growth in Changing Environments</p>
+  <p class="hero-byline">John Mittelstaedt &middot; Gonzaga University</p>
+  <div class="hero-divider"></div>
+  <p class="hero-opening">This framework emerged from years of teaching and industry engagement at the intersection of technology, organizational change, and human performance. It synthesizes research across identity psychology, mindfulness neuroscience, first-principles problem solving, and habit formation to propose a unified approach to culture transformation and individual growth in rapidly changing environments.</p>
+</header>
+
+
+<!-- SECTION 2: WHY IDENTITY, NOT SKILLS -->
+<section class="section bg-white">
+  <div class="content">
+    <div class="section-number">Section 01</div>
+    <div class="eyebrow">The Foundation</div>
+    <h2 class="section-title">Why Identity, Not Skills</h2>
+
+    <div class="prose">
+      <p>Most organizations invest in skill-building: master this tool, achieve this metric, complete this certification. But research in behavior change consistently shows that sustainable transformation begins not with skills, but with identity.</p>
+
+      <p>From <a href="https://jamesclear.com/atomic-habits" target="_blank" rel="noopener">James Clear's work</a> synthesizing identity-based habit formation: your current behaviors reflect your current identity. When you shift from "I need to learn AI" to "I am a curious problem solver," your behaviors follow naturally and durably. This is not motivational language — it is supported by neuroscience and behavioral psychology. Repeated identity-aligned actions rewire the brain for lasting change.</p>
+
+      <p><a href="https://aisel.aisnet.org/misq/vol39/iss4/5/" target="_blank" rel="noopener">Michelle Carter's research on IT Identity</a> provides the empirical foundation specific to technology adoption: IT identity — defined as the extent to which an individual views use of technology as integral to their sense of self — predicts both exploratory and feature-based technology usage in ways that existing competency or skill models do not. Identity precedes behavior. Identity sustains behavior where training alone cannot.</p>
+
+      <h3>Process-Based vs. Outcome-Based Identity</h3>
+
+      <p>A process-based identity is habitual and automatic. When you face uncertainty, your identity is your first reaction — not your deliberate choice. "I am a curious problem solver" means curiosity and problem definition are your default response to ambiguity, not techniques you remember to apply.</p>
+
+      <div class="callout">
+        <p>An outcome-based identity ("I am an AI expert," "I am successful") is fragile. When the outcome shifts — and in today's AI landscape, it will — the identity fractures. A process-based identity ("I am someone who asks questions and solves problems rigorously") is resilient. It survives failure, adaptation, and transformation because the process — not the outcome — is who you are.</p>
+      </div>
+
+      <p>This distinction matters enormously for organizations navigating AI adoption. Employees and leaders who anchor their identities to mastery of specific tools resist change when those tools evolve. Those who anchor to the process of curious, rigorous problem-solving adapt, lead others through uncertainty, and create compounding value.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 3: THE TWO DIMENSIONS -->
+<section class="section bg-cream">
+  <div class="content">
+    <div class="section-number">Section 02</div>
+    <div class="eyebrow">The Structure</div>
+    <h2 class="section-title">The Two Dimensions — A Yin-Yang Structure</h2>
+
+    <div class="prose">
+      <p>The Curious Problem Solver identity has two essential dimensions. They are not sequential. They are not hierarchical. Each is incomplete without the other — curiosity without rigor becomes waste; rigor without curiosity becomes rigidity.</p>
+    </div>
+
+    <div class="dimension-grid">
+      <div class="dimension-card curiosity">
+        <span class="dim-label">Dimension 1</span>
+        <h3>Curiosity</h3>
+        <p>The foundation of objectivity. A non-judgmental stance toward ambiguity, uncertainty, and the unfamiliar — activating equanimity rather than reactivity.</p>
+      </div>
+      <div class="dimension-card rigor">
+        <span class="dim-label">Dimension 2</span>
+        <h3>Problem Solving</h3>
+        <p>The anchor of rigor. Curiosity grounded in first-principles thinking — disciplined, precise, and focused on the actual problem rather than assumed solutions.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h4>Dimension 1 — Curiosity: The Foundation of Objectivity</h4>
+
+      <p>Curiosity, in this framework, is grounded in contemporary mindfulness neuroscience and Eastern contemplative traditions applied to modern psychology.</p>
+
+      <p><a href="https://www.judsonbrewer.com/the-craving-mind" target="_blank" rel="noopener">Judson Brewer's research</a> on addiction and habit change reveals that curiosity is fundamentally non-judgmental. When you approach a craving, a setback, or an unfamiliar technology with judgment — "I shouldn't feel this way," "I'm failing," "This threatens my expertise" — you trigger reactivity, defensiveness, and avoidance. These are the precise dynamics that stall organizational AI adoption.</p>
+
+      <p>When you approach the same situation with curiosity — "What is actually happening here? What can I observe? What am I not yet understanding?" — you activate equanimity: objective observation without the distorting filter of judgment. Brewer's central finding is that curiosity is neurologically incompatible with anxiety. It disengages the reward pathways that feed craving and defensiveness and activates clearer, more adaptive thinking.</p>
+
+      <p>This connects directly to Eastern mindfulness traditions and the concept of <em>beginner's mind</em> — approaching each situation as if for the first time, without the accumulated bias of prior conclusions. In organizational contexts, curiosity is the antidote to defensive culture. It is how an executive can acknowledge "I don't fully understand this AI capability yet" without shame. It is how a team can fail a pilot project and ask "What went wrong?" rather than "Who failed?"</p>
+
+      <div class="callout">
+        <p>Research also shows that curiosity correlates strongly with growth mindset, openness to feedback, reduced confirmation bias, and higher overall well-being — making it not just a professional asset but a human one.</p>
+      </div>
+
+      <h4>Dimension 2 — Problem Solving: Grounding Curiosity in Rigor</h4>
+
+      <p>Curiosity without a problem-solving anchor becomes endless and costly exploration. This is a documented pattern in organizational AI investment: teams explore fascinating capabilities that solve no defined problem, generating expense and disillusionment rather than value.</p>
+
+      <p>Problem solving in this framework draws from first-principles thinking — one of the most enduring methodologies in the history of human inquiry.</p>
+
+      <h3>The Foundations of First Principles Thinking</h3>
+
+      <p>First principles thinking has roots that span more than two millennia. <a href="https://classics.mit.edu/Aristotle/metaphysics.html" target="_blank" rel="noopener">Aristotle</a> defined a first principle as "the first basis from which a thing is known" — a foundational truth that cannot be deduced from anything else. In his <em>Metaphysics</em> and <em>Physics</em>, Aristotle argued that genuine understanding requires tracing any phenomenon back to its irreducible elements: not what we assume to be true, not what convention tells us, but what we can verify as foundational.</p>
+
+      <p><a href="https://www.earlymoderntexts.com/assets/pdfs/descartes1641.pdf" target="_blank" rel="noopener">René Descartes</a> formalized this approach in the 17th century through what is now called Cartesian Doubt: systematically questioning every assumption until only indubitable truths remain, then rebuilding knowledge from that solid foundation. This method became a cornerstone of the modern scientific tradition and the basis of empirical inquiry.</p>
+
+      <p>In contemporary practice, first-principles thinking has been applied across engineering, strategy consulting, product design, and innovation. Elon Musk's approach to SpaceX — refusing to accept the received wisdom that rockets were inherently expensive, decomposing the problem to raw materials and physics, and rebuilding from there — is a widely cited modern example. The insight: most "impossible" constraints are inherited assumptions, not foundational truths. When you strip them away, the solution space opens dramatically.</p>
+
+      <p>Applied to problem solving in organizations, first principles ask: <em>What is the actual problem — not the symptom, not the assumed solution, but the problem itself?</em> Can you state it simply enough to evaluate whether you've solved it? This discipline forces precision and prevents the common failure mode of building solutions to problems that were never clearly defined.</p>
+
+      <p>When curiosity meets first-principles rigor, several things follow:</p>
+
+      <ul>
+        <li><strong>Exploration becomes grounded</strong> — you follow curiosity into AI capabilities, but always return to: does this solve a real, defined problem?</li>
+        <li><strong>Waste decreases</strong> — not every interesting capability gets built; only those aligned to verified needs</li>
+        <li><strong>Value becomes communicable</strong> — you can explain not just what you built, but why it matters and how you know it worked</li>
+        <li><strong>Learning compounds</strong> — each problem solved teaches you something transferable about how to solve the next one</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 4: THE INTEGRATION -->
+<section class="section bg-teal">
+  <div class="content">
+    <div class="section-number" style="color:rgba(255,255,255,.2);">Section 03</div>
+    <div class="eyebrow">The Identity in Practice</div>
+    <h2 class="section-title">The Integration — What It Means to Be a Curious Problem Solver</h2>
+
+    <div class="prose">
+      <p>When this identity is internalized, the automatic response to uncertainty, challenge, or ambiguity follows a pattern:</p>
+    </div>
+
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Curiosity First</div>
+          <div class="step-desc">"What is actually happening? What am I missing? What biases am I bringing to this?"</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Problem Definition</div>
+          <div class="step-desc">"What is the core problem? How would I know if it were solved?"</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Disciplined Exploration</div>
+          <div class="step-desc">"What solutions are grounded in this problem? What does the evidence suggest?"</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Iteration as Normal</div>
+          <div class="step-desc">"Did this work? What did we learn? What do we do differently?"</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:2rem;">
+      <div class="key-statement">This identity is not situational. It does not switch off under pressure. It gets stronger through use — both through success, which confirms the identity, and through challenge, which requires defending and deepening it.</div>
+
+      <h3>Universality and Well-Being</h3>
+
+      <p>The framework's power extends beyond technology. A curious problem solver approaches a team conflict, a business pivot, a personal setback, or a new market with the same identity: curiosity about what is actually true, precision about what the actual problem is, and disciplined iteration toward a grounded solution.</p>
+
+      <p>This universality is intentional and consequential. Research on curiosity, growth mindset, and process-based identity consistently connects these orientations to lower anxiety, higher engagement, greater resilience, and sustained well-being. Building a curious problem solver identity is not just an organizational change strategy — it is an investment in human flourishing.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 5: RESEARCH FOUNDATIONS -->
+<section class="section bg-white">
+  <div class="content">
+    <div class="section-number">Section 04</div>
+    <div class="eyebrow">Sources &amp; Research Foundations</div>
+    <h2 class="section-title">Research Foundations and Sources</h2>
+
+    <div class="prose">
+      <p>The following sources form the empirical and philosophical foundation of this framework. Each entry includes the work's relevance to the Curious Problem Solver identity and a direct link for independent review.</p>
+    </div>
+
+    <!-- Group 1: Identity & Behavior Change -->
+    <div class="ref-group">
+      <div class="ref-group-label">On Identity and Behavior Change</div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>James Clear</strong>, <em>Atomic Habits</em> (2018) — Identity-based habit formation as the driver of lasting behavioral change. The central thesis: sustainable behavior change begins with identity, not outcomes or willpower.</p>
+          <a class="ref-link" href="https://jamesclear.com/atomic-habits" target="_blank" rel="noopener">jamesclear.com/atomic-habits</a>
+        </div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>James Clear</strong>, <em>"First Principles: Elon Musk on the Power of Thinking for Yourself"</em> — Overview of first principles thinking and its relationship to identity-driven problem solving.</p>
+          <a class="ref-link" href="https://jamesclear.com/first-principles" target="_blank" rel="noopener">jamesclear.com/first-principles</a>
+        </div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>Michelle Carter &amp; Varun Grover</strong>, <em>"Me, My Self, and I(T): Conceptualizing Information Technology Identity and its Implications,"</em> MIS Quarterly, 2015 — Empirical research defining IT identity as the extent to which individuals view technology use as integral to their sense of self. Predicts exploratory and feature-based technology adoption.</p>
+          <a class="ref-link" href="https://aisel.aisnet.org/misq/vol39/iss4/5/" target="_blank" rel="noopener">aisel.aisnet.org/misq/vol39/iss4/5/</a>
+        </div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>Michelle Carter, Stacie Petter, Varun Grover &amp; Jason Thatcher</strong>, <em>"Information Technology Identity: A Key Determinant of IT Feature and Exploratory Usage,"</em> MIS Quarterly, 2020 — Empirical validation showing IT identity as a significant predictor of how individuals engage with and innovate with technology in organizational contexts.</p>
+          <a class="ref-link" href="https://doi.org/10.25300/MISQ/2020/14607" target="_blank" rel="noopener">doi.org/10.25300/MISQ/2020/14607</a>
+        </div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>Daphna Oyserman</strong>, <em>"Identity-Based Motivation: Implications for Action-Readiness and Procedural-Readiness,"</em> Journal of Experimental Social Psychology — Research on how identity-based motivation drives action in ways outcome-focused goals do not.</p>
+          <a class="ref-link" href="https://dornsife.usc.edu/oyserman/identity-based-motivation/" target="_blank" rel="noopener">dornsife.usc.edu/oyserman/identity-based-motivation/</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 2: Curiosity, Mindfulness & Equanimity -->
+    <div class="ref-group">
+      <div class="ref-group-label">On Curiosity, Mindfulness, and Equanimity</div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>Judson Brewer</strong>, <em>The Craving Mind</em> (2017) — Research on how curiosity and mindful awareness interrupt reactive habit loops. Curiosity as a neuroscientific mechanism for disengaging anxiety and craving reward pathways.</p>
+          <a class="ref-link" href="https://www.judsonbrewer.com/the-craving-mind" target="_blank" rel="noopener">judsonbrewer.com/the-craving-mind</a>
+        </div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>Judson Brewer</strong>, <em>Unwinding Anxiety</em> (2021) — Applied research showing curiosity as the primary cognitive tool for breaking anxiety and avoidance cycles. Directly applicable to organizational change resistance.</p>
+          <a class="ref-link" href="https://www.judsonbrewer.com/unwinding-anxiety" target="_blank" rel="noopener">judsonbrewer.com/unwinding-anxiety</a>
+        </div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>Judson Brewer</strong>, <em>"Curiosity: Our Superpower for Just About Everything,"</em> Psychology Today — Overview of research on curiosity as a baseline psychological response supporting learning, adaptation, and resilience.</p>
+          <a class="ref-link" href="https://www.psychologytoday.com/us/contributors/judson-brewer-md-phd" target="_blank" rel="noopener">psychologytoday.com/us/contributors/judson-brewer-md-phd</a>
+        </div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>Carol Dweck</strong>, <em>Mindset: The New Psychology of Success</em> (2006) — Foundational research on growth versus fixed mindsets. Process-based identity directly aligns with growth mindset orientation.</p>
+          <a class="ref-link" href="https://www.penguinrandomhouse.com/books/44330/mindset-by-carol-s-dweck-phd/" target="_blank" rel="noopener">penguinrandomhouse.com/books/44330/mindset-by-carol-s-dweck-phd/</a>
+        </div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>Mihály Csíkszentmihályi</strong>, <em>Flow: The Psychology of Optimal Experience</em> (1990) — Research on how curiosity and engaged attention create optimal psychological states. Flow as the experiential outcome of curious, absorbed problem-solving.</p>
+          <a class="ref-link" href="https://www.harpercollins.com/products/flow-mihaly-csikszentmihalyi" target="_blank" rel="noopener">harpercollins.com/products/flow-mihaly-csikszentmihalyi</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 3: First Principles Thinking -->
+    <div class="ref-group">
+      <div class="ref-group-label">On First Principles Thinking</div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>Aristotle</strong>, <em>Metaphysics and Physics</em> (c. 350 BCE) — The foundational philosophical texts establishing first principles as "the first basis from which a thing is known." The origin of the methodology.</p>
+          <a class="ref-link" href="https://classics.mit.edu/Aristotle/metaphysics.html" target="_blank" rel="noopener">classics.mit.edu/Aristotle/metaphysics.html</a>
+        </div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>René Descartes</strong>, <em>Meditations on First Philosophy</em> (1641) — Descartes' Cartesian Doubt methodology: systematically questioning every assumption until only foundational truths remain. The basis for modern scientific and empirical reasoning.</p>
+          <a class="ref-link" href="https://www.earlymoderntexts.com/assets/pdfs/descartes1641.pdf" target="_blank" rel="noopener">earlymoderntexts.com/assets/pdfs/descartes1641.pdf</a>
+        </div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>Farnam Street</strong>, <em>"First Principles: The Building Blocks of True Knowledge"</em> — Comprehensive overview of first principles thinking from Plato through Aristotle, Descartes, and contemporary application.</p>
+          <a class="ref-link" href="https://fs.blog/first-principles/" target="_blank" rel="noopener">fs.blog/first-principles/</a>
+        </div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-dot"></div>
+        <div class="ref-content">
+          <p><strong>Innovative Policy Solutions</strong>, <em>"Who Uses First Principles Thinking and Why You Should Become One of Them"</em> — History and development of first principles thinking from its philosophical foundations to modern problem-solving practice.</p>
+          <a class="ref-link" href="https://www.innovativepolicysolutions.org/articles/who-uses-first-principles-thinking-and-why-you-should-become-one-of-them" target="_blank" rel="noopener">innovativepolicysolutions.org/articles/who-uses-first-principles-thinking-and-why-you-should-become-one-of-them</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 6: IMPLICATIONS FOR ORGANIZATIONS -->
+<section class="section bg-cream">
+  <div class="content">
+    <div class="section-number">Section 05</div>
+    <div class="eyebrow">Organizational Application</div>
+    <h2 class="section-title">Implications for Organizations</h2>
+
+    <div class="prose">
+      <p>Organizations struggling with AI adoption and culture change are often fighting identity battles they have not named. Employees who have anchored their identities to mastery of specific systems feel threatened by AI's uncertainty. Teams rewarded for executing fixed plans struggle with the ambiguity of exploration. Neither training nor mandates resolve this — identity does.</p>
+
+      <div class="callout">
+        <p>The Curious Problem Solver framework offers a path that is neither "embrace all change" nor "resist all change." It is: develop the identity that helps you stay curious about what change means for your actual problems, then solve those problems with rigor.</p>
+      </div>
+
+      <p>Leaders who model this identity — who openly acknowledge what they don't know, who ask first-principles questions before proposing solutions, who treat iteration as normal rather than failure — create psychological safety for others to do the same. Culture shifts when identity shifts.</p>
+
+      <div class="key-statement">The unit of culture transformation is not the policy or the training program. It is the identity of the people inside the organization — and identity is changed by practice, not by mandate.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <img src="https://gu-27.github.io/inland-nw-ai/img/ai-mark.png" alt="Inland NW AI">
+    <span style="color:rgba(255,255,255,.5); font-weight:600; font-size:.82rem;">Inland NW AI</span>
+  </div>
+  <p><strong>The Curious Problem Solver</strong> — John Mittelstaedt, Gonzaga University</p>
+  <p style="margin-top:.4rem;">A resource of <a href="https://inlandnw.ai" target="_blank" rel="noopener">Inland NW AI</a> &middot; Spokane &amp; the Inland Northwest</p>
+</footer>
+
+</body>
+</html>
