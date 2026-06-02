@@ -393,6 +393,44 @@
     line-height: 1.65;
   }
 
+  /* ── OUTCOME TABLE ── */
+  .outcome-table {
+    margin: 1.5rem 0 2rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .outcome-row {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .outcome-row:last-child { border-bottom: none; }
+  .outcome-label {
+    padding: 1rem 1.25rem;
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--teal-dk);
+    background: var(--teal-bg);
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .outcome-desc {
+    padding: 1rem 1.25rem;
+    font-size: .9rem;
+    color: var(--muted);
+    line-height: 1.65;
+    display: flex;
+    align-items: center;
+    background: var(--white);
+  }
+  @media (max-width: 600px) {
+    .outcome-row { grid-template-columns: 1fr; }
+    .outcome-label { border-bottom: 1px solid var(--border); }
+  }
+
   /* ── SECTION DIVIDER ── */
   .section-number {
     font-size: .62rem;
@@ -605,7 +643,7 @@
         <p>Research also shows that curiosity correlates strongly with growth mindset, openness to feedback, reduced confirmation bias, and higher overall well-being, making it not just a professional asset but a human one.</p>
       </div>
 
-      <h4>Dimension 2: Grounding Curiosity in Rigor</h4>
+      <h4>Dimension 2: Grounding Curiosity in Problem Solving</h4>
 
       <p>Curiosity without a problem to anchor on generates interesting observations that never land. Problem solving is what makes curiosity valuable: it gives exploration a destination and ensures that what you learn creates value for someone. The problem is not just a starting point; it is a frame you return to throughout. Defining it precisely, measuring against it, and resisting the pull toward solutions before the problem is fully understood is what separates productive exploration from creative wandering.</p>
 
@@ -613,20 +651,32 @@
 
       <p>Applied to problem solving, first principles ask: <em>What is the actual problem? Not the symptom, not the assumed solution, but the problem itself.</em> Can you state it simply enough to evaluate whether you have solved it? This discipline forces precision and prevents the common failure mode of building solutions to problems that were never clearly defined.</p>
 
-      <p>When curiosity meets first-principles rigor, several things follow:</p>
+      <p>When curiosity and problem solving work together, several things follow:</p>
 
-      <ul>
-        <li><strong>Exploration becomes grounded:</strong> you follow curiosity into new ideas and capabilities, but always return to whether this addresses a real, defined problem</li>
-        <li><strong>Waste decreases:</strong> not every interesting possibility gets pursued; only those aligned to verified needs</li>
-        <li><strong>Value becomes communicable:</strong> you can explain not just what you built, but why it matters and how you know it worked</li>
-        <li><strong>Learning compounds:</strong> each problem solved teaches something transferable about how to approach the next one</li>
-      </ul>
+      <div class="outcome-table">
+        <div class="outcome-row">
+          <div class="outcome-label">Exploration becomes grounded</div>
+          <div class="outcome-desc">You follow curiosity into new ideas and capabilities, but always return to whether this addresses a real, defined problem.</div>
+        </div>
+        <div class="outcome-row">
+          <div class="outcome-label">Waste decreases</div>
+          <div class="outcome-desc">Not every interesting possibility gets pursued. Only those aligned to a verified need move forward.</div>
+        </div>
+        <div class="outcome-row">
+          <div class="outcome-label">Value becomes communicable</div>
+          <div class="outcome-desc">You can explain not just what you built, but why it matters and how you know it worked.</div>
+        </div>
+        <div class="outcome-row">
+          <div class="outcome-label">Learning compounds</div>
+          <div class="outcome-desc">Each problem solved teaches something transferable about how to approach the next one.</div>
+        </div>
+      </div>
 
-      <h3>Curiosity and Rigor as a Dynamic Capability</h3>
+      <h3>Curiosity and Problem Solving as a Dynamic Capability</h3>
 
       <p>Too much curiosity without structure becomes intellectual wandering: endlessly interesting, rarely impactful. Too much structure without curiosity becomes rigidity: precise and efficient at solving yesterday's problems, blind to tomorrow's. Neither extreme serves well in a rapidly changing environment.</p>
 
-      <p>What makes this a powerful identity is the productive tension between the two dimensions. In the organizational strategy literature, the ability to integrate and reconfigure complementary competencies in response to a changing environment is described as a dynamic capability. The Curious Problem Solver identity is dynamic in this sense: not curiosity maximized, not rigor maximized, but the practiced capacity to draw on both in proportion to what the situation demands. That balance, held consistently, is what separates adaptive thinkers from merely skilled ones.</p>
+      <p>What makes this a powerful identity is the productive tension between the two dimensions. In the organizational strategy literature, the ability to integrate and reconfigure complementary competencies in response to a changing environment is described as a dynamic capability. The Curious Problem Solver identity is dynamic in this sense: not curiosity maximized, not problem solving maximized, but the practiced capacity to draw on both in proportion to what the situation demands. That balance, held consistently, is what separates adaptive thinkers from merely skilled ones.</p>
     </div>
   </div>
 </section>
